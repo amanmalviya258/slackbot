@@ -1,0 +1,8 @@
+# Ignore artifacts:
+build
+coverage
+.env
+jspm_packages
+/node_modules
+./dist
+./package.json
