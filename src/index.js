@@ -14,7 +14,7 @@ app.command("/say_name", async ({ command, ack, say }) => {
   await say(`Hello mdck,<@${command.user_id}>`);
 });
 
-// Listens to incoming messages that contain "hello"
+
 app.command("/approval-test", async ({ ack, body, client, logger }) => {
   // Acknowledge the command request
   await ack();
@@ -71,6 +71,7 @@ app.command("/approval-test", async ({ ack, body, client, logger }) => {
             },
             element: {
               type: "plain_text_input",
+              action_id:'request_text',
               multiline: true,
             },
           },
@@ -82,6 +83,84 @@ app.command("/approval-test", async ({ ack, body, client, logger }) => {
     logger.error(error);
   }
 });
+
+app.view('approval_modal', async ({ ack, body, view, client, logger }) => {
+  await ack();
+
+  const requester = body.user.id;
+  const selectedUser = view.state.values.user_section.selected_user.selected_user;
+  const requestText = view.state.values.request_input.request_text.value;
+
+  try {
+    await client.chat.postMessage({
+      channel: selectedUser,
+      text: `You have a new approval request from <@${requester}>`,
+      blocks: [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `*Approval Request from <@${requester}>*\n>${requestText}`
+          }
+        },
+        {
+          type: 'actions',
+          block_id: 'approval_actions',
+          elements: [
+            {
+              type: 'button',
+              text: {
+                type: 'plain_text',
+                text: 'Approve'
+              },
+              style: 'primary',
+              value: JSON.stringify({ requester, decision: 'approved' }),
+              action_id: 'approval_decision'
+            },
+            {
+              type: 'button',
+              text: {
+                type: 'plain_text',
+                text: 'Deny'
+              },
+              style: 'danger',
+              value: JSON.stringify({ requester, decision: 'denied' }),
+              action_id: 'approval_decision'
+            }
+          ]
+        }
+      ]
+    });
+  } catch (error) {
+    logger.error(error);
+  }
+});
+
+app.action('approval_decision', async ({ body, ack, client, action, logger }) => {
+  await ack();
+
+  const { requester, decision } = JSON.parse(action.value);
+  const approver = body.user.id;
+
+  try {
+    // Notify requester
+    await client.chat.postMessage({
+      channel: requester,
+      text: `Your request has been *${decision}* by <@${approver}>.`
+    });
+
+    // Update the approver's message to show decision (optional)
+    await client.chat.update({
+      channel: body.channel.id,
+      ts: body.message.ts,
+      text: `Request has been *${decision}* by <@${approver}>.`,
+      blocks: []
+    });
+  } catch (error) {
+    logger.error(error);
+  }
+});
+
 
 (async () => {
   try {
