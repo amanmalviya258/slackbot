@@ -131,5 +131,8 @@ npm start
 - `prettier`: Code formatting
 
 
-## More detail of the structre and working of the project is available on eraser.io
+## More details of the architectural structure/Sequence workflow are available on eraser.io
 **Link=>** https://app.eraser.io/workspace/xA5tn7SAtUrmeR7QuPxJ?origin=share
+
+##Video Demonstration
+**=>** https://www.youtube.com/watch?v=NPaMjIcXqjI
