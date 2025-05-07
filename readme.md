@@ -10,8 +10,8 @@ A Slack bot application built with Node.js and the Slack Bolt framework that fac
 
 - **Approval Workflow**
   - Request submission through modal interfaces in channels chat or the bot's DM.
-  - Approval and denial action for the approval appears in Bot's DM.
-  - Request review functionality,Decision will be sent to the requester in the Bot's DM
+  - Approval and denial action for the approval appear in Bot's DM.
+  - Request review functionality, Decision will be sent to the requester in the Bot's DM
 
 ## Prerequisites
 
@@ -135,4 +135,4 @@ npm start
 **Link=>** https://app.eraser.io/workspace/xA5tn7SAtUrmeR7QuPxJ?origin=share
 
 ## Video Demonstration ##
-**=>** https://www.youtube.com/watch?v=NPaMjIcXqjI
+**Link=>** https://www.youtube.com/watch?v=NPaMjIcXqjI
